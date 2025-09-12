@@ -1,0 +1,123 @@
+{
+  "info": {
+    "name": "Ktor Posts API",
+    "_postman_id": "c6b8a970-5e11-4a9a-9bda-123456789abc",
+    "description": "Коллекция для проверки API постов на Ktor (GET, POST, DELETE, фильтрация, health-check).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/health",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["health"]
+        }
+      }
+    },
+    {
+      "name": "Create Post",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Первый пост\",\n  \"content\": \"Тестовый текст\",\n  \"tags\": [\"ktor\", \"demo\"]\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/posts",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["posts"]
+        }
+      }
+    },
+    {
+      "name": "Get All Posts",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/posts",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["posts"]
+        }
+      }
+    },
+    {
+      "name": "Get Post by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/posts/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["posts", "1"]
+        }
+      }
+    },
+    {
+      "name": "Get Posts by Tag",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/posts?tag=ktor",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["posts"],
+          "query": [
+            { "key": "tag", "value": "ktor" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get Posts by Title Contains",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/posts?title=Первый",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["posts"],
+          "query": [
+            { "key": "title", "value": "Первый" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Delete Post by ID",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/posts/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["posts", "1"]
+        }
+      }
+    }
+  ]
+}
