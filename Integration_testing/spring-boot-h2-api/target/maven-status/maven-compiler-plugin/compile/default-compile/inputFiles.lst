@@ -1,0 +1,16 @@
+C:\Users\Admin\Downloads\ITHub_2025_2026\Интеграционное_тестирование\spring-boot-h2-api\src\main\java\com\example\api\model\OrderEntity.java
+C:\Users\Admin\Downloads\ITHub_2025_2026\Интеграционное_тестирование\spring-boot-h2-api\src\main\java\com\example\api\dto\LoginRequest.java
+C:\Users\Admin\Downloads\ITHub_2025_2026\Интеграционное_тестирование\spring-boot-h2-api\src\main\java\com\example\api\model\Product.java
+C:\Users\Admin\Downloads\ITHub_2025_2026\Интеграционное_тестирование\spring-boot-h2-api\src\main\java\com\example\api\dto\RefreshRequest.java
+C:\Users\Admin\Downloads\ITHub_2025_2026\Интеграционное_тестирование\spring-boot-h2-api\src\main\java\com\example\api\SecurityConfig.java
+C:\Users\Admin\Downloads\ITHub_2025_2026\Интеграционное_тестирование\spring-boot-h2-api\src\main\java\com\example\api\service\AuthService.java
+C:\Users\Admin\Downloads\ITHub_2025_2026\Интеграционное_тестирование\spring-boot-h2-api\src\main\java\com\example\api\model\User.java
+C:\Users\Admin\Downloads\ITHub_2025_2026\Интеграционное_тестирование\spring-boot-h2-api\src\main\java\com\example\api\repository\UserRepository.java
+C:\Users\Admin\Downloads\ITHub_2025_2026\Интеграционное_тестирование\spring-boot-h2-api\src\main\java\com\example\api\repository\OrderRepository.java
+C:\Users\Admin\Downloads\ITHub_2025_2026\Интеграционное_тестирование\spring-boot-h2-api\src\main\java\com\example\api\dto\AuthResponse.java
+C:\Users\Admin\Downloads\ITHub_2025_2026\Интеграционное_тестирование\spring-boot-h2-api\src\main\java\com\example\api\repository\ProductRepository.java
+C:\Users\Admin\Downloads\ITHub_2025_2026\Интеграционное_тестирование\spring-boot-h2-api\src\main\java\com\example\api\controller\ProductController.java
+C:\Users\Admin\Downloads\ITHub_2025_2026\Интеграционное_тестирование\spring-boot-h2-api\src\main\java\com\example\api\controller\AuthController.java
+C:\Users\Admin\Downloads\ITHub_2025_2026\Интеграционное_тестирование\spring-boot-h2-api\src\main\java\com\example\api\SpringBootH2ApiApplication.java
+C:\Users\Admin\Downloads\ITHub_2025_2026\Интеграционное_тестирование\spring-boot-h2-api\src\main\java\com\example\api\controller\OrderController.java
+C:\Users\Admin\Downloads\ITHub_2025_2026\Интеграционное_тестирование\spring-boot-h2-api\src\main\java\com\example\api\controller\UserController.java

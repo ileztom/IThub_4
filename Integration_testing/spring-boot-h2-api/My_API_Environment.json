@@ -1,0 +1,12 @@
+{
+  "id": "1234-5678",
+  "name": "My API Environment",
+  "values": [
+    { "key": "base_url", "value": "http://localhost:8080", "enabled": true },
+    { "key": "auth_token", "value": "", "enabled": true },
+    { "key": "refresh_token", "value": "", "enabled": true },
+    { "key": "user_id", "value": "", "enabled": true },
+    { "key": "product_id", "value": "", "enabled": true },
+    { "key": "order_id", "value": "", "enabled": true }
+  ]
+}
