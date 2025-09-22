@@ -72,11 +72,10 @@
 ## 🖼 Примеры скриншотов успешного выполнения тестов
 
 ### ✅ Products
-![Products](<img width="1920" height="1020" alt="Тесты_Products" src="https://github.com/user-attachments/assets/c41f3d6b-4747-4f08-874d-f83ff9c23c66" />
-)
+![Products](https://github.com/ileztom/IThub_4/blob/main/Integration_testing/spring-boot-h2-api/%D0%A2%D0%B5%D1%81%D1%82%D1%8B_Products.png)
 
 ### ✅ Users
-![Users](<img width="1920" height="1020" alt="Тесты_Users" src="https://github.com/user-attachments/assets/da10928b-1a26-4d53-9282-be81dac29d13" />)
+![Users](https://github.com/ileztom/IThub_4/blob/main/Integration_testing/spring-boot-h2-api/%D0%A2%D0%B5%D1%81%D1%82%D1%8B_Users.png)
 
 ---
 
