@@ -33,8 +33,8 @@
 
 ### 1. Клонирование репозитория
 ```bash
-git clone <URL-репозитория>
-cd <директория-репозитория>
+git clone https://github.com/ileztom/IThub_4/edit/main/Kotlin/ktor-sample
+cd ktor-sample
 ```
 
 ### 2. Настройка PostgreSQL
