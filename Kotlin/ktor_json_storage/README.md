@@ -27,7 +27,7 @@
 
 1. Склонируйте или скачайте проект:
    ```bash
-   git clone https://github.com/  
+   git clone https://github.com/ileztom/IThub_4/tree/main/Kotlin/ktor_json_storage
    cd ktor_json_storage  
 
 2. Запустите сервер:
