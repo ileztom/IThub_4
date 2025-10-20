@@ -28,7 +28,7 @@
 
 1. Склонируйте проект:  
 ```bash
-git clone <URL_репозитория>
+git clone https://github.com/ileztom/IThub_4/tree/main/Kotlin/project-root
 cd project-root
 ```
 2. Соберите проект через Gradle:
