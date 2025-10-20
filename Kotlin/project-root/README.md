@@ -1,40 +1,97 @@
-# project-root
+# 📦 Ktor JWT + PostgreSQL API
 
-This project was created using the [Ktor Project Generator](https://start.ktor.io).
+Полнофункциональное CRUD-приложение на **Ktor**, с хранением данных в **PostgreSQL**, поддержкой **JWT-аутентификации**, ролей пользователей и **WebSocket** для работы в реальном времени. Документация через **Swagger UI**, централизованная обработка ошибок и логирование запросов.
 
-Here are some useful links to get you started:
+---
 
-- [Ktor Documentation](https://ktor.io/docs/home.html)
-- [Ktor GitHub page](https://github.com/ktorio/ktor)
-- The [Ktor Slack chat](https://app.slack.com/client/T09229ZC6/C0A974TJ9). You'll need
-  to [request an invite](https://surveys.jetbrains.com/s3/kotlin-slack-sign-up) to join.
+## 🚀 Возможности
 
-## Features
+✅ **CRUD** для сущностей:
+- **/users** — пользователи (id, username, password, role)  
+- **/posts** — посты (id, title, description, location, image, timestamp)  
 
-Here's a list of features included in this project:
+✅ **Аутентификация и роли**:
+- JWT-токены  
+- Роли пользователей: `admin`, `user`  
+- Ограничение доступа к эндпоинтам по ролям  
 
-| Name                                               | Description                                                 |
-|----------------------------------------------------|-------------------------------------------------------------|
-| [Routing](https://start.ktor.io/p/routing-default) | Allows to define structured routes and associated handlers. |
+✅ **WebSocket**:
+- `/chat` — чат для пользователей в реальном времени  
+- `/announce` — сообщения от админа  
 
-## Building & Running
+✅ Данные сохраняются в **PostgreSQL**  
 
-To build or run the project, use one of the following tasks:
 
-| Task                                    | Description                                                          |
-|-----------------------------------------|----------------------------------------------------------------------|
-| `./gradlew test`                        | Run the tests                                                        |
-| `./gradlew build`                       | Build everything                                                     |
-| `./gradlew buildFatJar`                 | Build an executable JAR of the server with all dependencies included |
-| `./gradlew buildImage`                  | Build the docker image to use with the fat JAR                       |
-| `./gradlew publishImageToLocalRegistry` | Publish the docker image locally                                     |
-| `./gradlew run`                         | Run the server                                                       |
-| `./gradlew runDocker`                   | Run using the local docker image                                     |
+---
 
-If the server starts successfully, you'll see the following output:
+## ⚙️ Установка и запуск
 
+1. Склонируйте проект:  
+```bash
+git clone <URL_репозитория>
+cd project-root
 ```
-2024-12-04 14:32:45.584 [main] INFO  Application - Application started in 0.303 seconds.
-2024-12-04 14:32:45.682 [main] INFO  Application - Responding at http://0.0.0.0:8080
+2. Соберите проект через Gradle:
+```bash
+./gradlew clean shadowJar
+```
+3. Запустите сервер с помощью Docker:
+```bash
+docker-compose up --build
+```
+4. Откройте в браузере:
+```bash
+http://localhost:8080/
 ```
 
+## 📘 Документация API
+
+Swagger UI автоматически генерируется при запуске сервера:
+
+- Главная страница: ```http://localhost:8080/```
+- OpenAPI JSON: ```http://localhost:8080/openapi.json```
+
+## 🔍 Примеры запросов
+
+### ▶ Регистрация пользователя
+```bash
+POST /auth/register
+Content-Type: application/json
+
+{
+  "username": "user1",
+  "password": "123456",
+  "role": "user"
+}
+```
+
+### ▶ Логин пользователя (JWT)
+```bash
+POST /auth/login
+Content-Type: application/json
+
+{
+  "username": "user1",
+  "password": "123456"
+}
+```
+Ответ:
+```bash
+{
+  "token": "<JWT-токен>"
+}
+```
+
+### ▶ Добавить пост
+```bash
+POST /posts
+Authorization: Bearer <JWT-токен>
+Content-Type: application/json
+
+{
+  "title": "Мой первый пост",
+  "description": "Пример поста",
+  "location": "Москва",
+  "image": "image_url"
+}
+```
