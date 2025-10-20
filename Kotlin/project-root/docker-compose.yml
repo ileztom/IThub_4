@@ -1,0 +1,29 @@
+version: "3.8"
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: appdb
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: pass
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  app:
+    build: .
+    depends_on:
+      - db
+    environment:
+      JDBC_DATABASE_URL: jdbc:postgresql://db:5432/appdb
+      DB_USER: app
+      DB_PASSWORD: pass
+      PORT: 8080
+      JWT_SECRET: change-me
+    ports:
+      - "8080:8080"
+    restart: on-failure
+
+volumes:
+  pgdata:
