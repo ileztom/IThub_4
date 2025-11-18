@@ -165,8 +165,13 @@
 ```
 
 # 🖼️ 4. Скриншоты работы сервисов
-
-
+<div style="text-align: center;">
+    <img height="793" src="https://github.com/user-attachments/assets/6512ca74-afbf-457b-b30a-d4155b99816c"/>
+    <img height="797" src="https://github.com/user-attachments/assets/e27a1e0c-f156-48f9-b0fc-006bbcc43203"/>
+</div>
+<div align="center">
+    <img height="767" src="https://github.com/user-attachments/assets/ae081065-232c-43ae-947e-44baf5044e03"/>
+</div>
 
 # 🐳 5. Docker Compose и запуск проекта
 
