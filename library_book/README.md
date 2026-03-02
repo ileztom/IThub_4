@@ -230,7 +230,6 @@ MongoDB выбрана как:
 - Настройка мониторинга (Prometheus + Grafana опционально)
 - Документирование API (Swagger/OpenAPI)
 
-**Общее время миграции: ~12 недель**
 **Downtime при каждом переключении: < 1 минуты (blue-green deployment)**
 
 ---
