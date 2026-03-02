@@ -1,0 +1,35 @@
+server:
+  port: ${SERVER_PORT:8084}
+
+spring:
+  application:
+    name: notification-service
+  data:
+    mongodb:
+      uri: ${SPRING_DATA_MONGODB_URI:mongodb://localhost:27017/library_notifications}
+      auto-index-creation: true
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: 5672
+    username: ${RABBITMQ_USERNAME:admin}
+    password: ${RABBITMQ_PASSWORD:password}
+    listener:
+      simple:
+        retry:
+          enabled: true
+          initial-interval: 1000
+          max-attempts: 3
+          multiplier: 2
+
+jwt:
+  secret: ${JWT_SECRET:libSecretKey2024LibraryAppSecretKey256Bits!}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+
+logging:
+  level:
+    com.library.notification: DEBUG
