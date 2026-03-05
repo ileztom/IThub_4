@@ -1,0 +1,44 @@
+server:
+  port: ${SERVER_PORT:8081}
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
+
+spring:
+  application:
+    name: user-service
+  data:
+    mongodb:
+      uri: ${SPRING_DATA_MONGODB_URI:mongodb://localhost:27017/library_users}
+      auto-index-creation: true
+
+jwt:
+  secret: ${JWT_SECRET:libSecretKey2024LibraryAppSecretKey256Bits!}
+  expiration: 86400000  # 24 hours
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    com.library.user: DEBUG
+    org.springframework.security: WARN
+
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    display-request-duration: true
+    operations-sorter: alpha
+    tags-sorter: alpha
+    try-it-out-enabled: true
+  api-docs:
+    enabled: true
+    path: /v3/api-docs

@@ -1,0 +1,35 @@
+server:
+  port: ${SERVER_PORT:8082}
+
+spring:
+  application:
+    name: catalog-service
+  data:
+    mongodb:
+      uri: ${SPRING_DATA_MONGODB_URI:mongodb://localhost:27017/library_catalog}
+      auto-index-creation: true
+
+jwt:
+  secret: ${JWT_SECRET:libSecretKey2024LibraryAppSecretKey256Bits!}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+
+logging:
+  level:
+    com.library.catalog: DEBUG
+
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    display-request-duration: true
+    operations-sorter: alpha
+    tags-sorter: alpha
+    try-it-out-enabled: true
+  api-docs:
+    enabled: true
+    path: /v3/api-docs

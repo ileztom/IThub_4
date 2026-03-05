@@ -1,0 +1,60 @@
+server:
+  port: ${SERVER_PORT:8083}
+
+spring:
+  application:
+    name: loan-service
+  data:
+    mongodb:
+      uri: ${SPRING_DATA_MONGODB_URI:mongodb://localhost:27017/library_loans}
+      auto-index-creation: true
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: 5672
+    username: ${RABBITMQ_USERNAME:admin}
+    password: ${RABBITMQ_PASSWORD:password}
+
+catalog:
+  service:
+    url: ${CATALOG_SERVICE_URL:http://localhost:8082}
+
+user:
+  service:
+    url: ${USER_SERVICE_URL:http://localhost:8081}
+
+jwt:
+  secret: ${JWT_SECRET:libSecretKey2024LibraryAppSecretKey256Bits!}
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      catalog:
+        sliding-window-size: 10
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 10s
+      user:
+        sliding-window-size: 10
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 10s
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,circuitbreakers
+
+logging:
+  level:
+    com.library.loan: DEBUG
+
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    display-request-duration: true
+    operations-sorter: alpha
+    tags-sorter: alpha
+    try-it-out-enabled: true
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
