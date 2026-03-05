@@ -283,46 +283,46 @@ MongoDB выбрана как:
 
 ## План поэтапной миграции (Монолит → Микросервисы)
 
-### Этап 1 — Подготовка (1-2 недели)
+### Этап 1 — Подготовка
 - Анализ монолита, выделение bounded contexts
 - Настройка CI/CD pipeline
 - Поднятие инфраструктуры: MongoDB, RabbitMQ, Docker registry
 - Написание тестов для существующего монолита (baseline)
 
-### Этап 2 — Strangler Fig: User Service (2 недели)
+### Этап 2 — Strangler Fig: User Service
 - Вынесение аутентификации и управления пользователями в отдельный сервис
 - Монолит продолжает работать, новые запросы на auth → User Service
 - Миграция данных пользователей в MongoDB
 - **Zero downtime**: Feature flag для постепенного переключения
 
-### Этап 3 — Catalog Service (2 недели)
+### Этап 3 — Catalog Service
 - Вынесение каталога книг
 - Синхронизация данных монолит ↔ Catalog Service через dual-write
 - Поисковые запросы переключить на новый сервис
 - Тестирование и снятие dual-write
 
-### Этап 4 — Loan Service (2 недели)
+### Этап 4 — Loan Service
 - Наиболее сложный сервис (зависит от User + Catalog)
 - Настройка OpenFeign клиентов
 - Интеграция Circuit Breaker
 - Параллельная работа монолита для проверки корректности
 
-### Этап 5 — Notification Service (1 неделя)
+### Этап 5 — Notification Service
 - Вынесение нотификаций
 - Настройка RabbitMQ exchange и очередей
 - Loan Service публикует события → Notification Service потребляет
 
-### Этап 6 — API Gateway (1 неделя)
+### Этап 6 — API Gateway
 - Настройка маршрутов в Spring Cloud Gateway
 - JWT валидация на уровне Gateway
 - CORS, rate limiting, logging
 
-### Этап 7 — Frontend миграция (2 недели)
+### Этап 7 — Frontend миграция
 - React + TypeScript приложение
 - Все запросы через единый API Gateway
 - Nginx для раздачи статики
 
-### Этап 8 — Завершение (1 неделя)
+### Этап 8 — Завершение
 - Отключение монолита
 - Нагрузочное тестирование
 - Настройка мониторинга (Prometheus + Grafana опционально)
