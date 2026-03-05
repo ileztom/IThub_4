@@ -85,11 +85,109 @@
 - React Router v6
 - Axios
 
+**API Documentation:**
+- springdoc-openapi 2.3.0 (генерация OpenAPI 3.0 спецификаций)
+- Swagger UI (интерактивная документация)
+- JWT Bearer авторизация в Swagger UI
+- Агрегация всех сервисов через единый API Gateway
+
 **Инфраструктура:**
 - MongoDB 7.0 (NoSQL, отдельная БД на каждый сервис)
 - RabbitMQ 3 (message broker)
 - Docker + Docker Compose
 - Nginx (reverse proxy для frontend)
+
+---
+
+## Swagger / OpenAPI
+
+### Как открыть Swagger UI
+
+Единый Swagger UI агрегирует все 4 микросервиса через API Gateway:
+
+```
+http://localhost:8080/webjars/swagger-ui/index.html
+```
+
+В выпадающем списке **"Select a definition"** (верхний правый угол) доступны все сервисы:
+
+| Сервис | Описание | Прямая ссылка на JSON |
+|---|---|---|
+| User Service | Аутентификация и пользователи | `http://localhost:8080/user-service/v3/api-docs` |
+| Catalog Service | Каталог книг | `http://localhost:8080/catalog-service/v3/api-docs` |
+| Loan Service | Учёт выдачи книг | `http://localhost:8080/loan-service/v3/api-docs` |
+| Notification Service | Уведомления | `http://localhost:8080/notification-service/v3/api-docs` |
+
+Каждый сервис также имеет собственный Swagger UI при прямом обращении:
+
+```
+http://localhost:8081/swagger-ui.html   ← User Service
+http://localhost:8082/swagger-ui.html   ← Catalog Service
+http://localhost:8083/swagger-ui.html   ← Loan Service
+http://localhost:8084/swagger-ui.html   ← Notification Service
+```
+
+---
+
+### Как авторизоваться в Swagger UI
+
+Swagger UI поддерживает тестирование защищённых эндпоинтов с JWT:
+
+**Шаг 1** — Выполните логин через `POST /api/auth/login`:
+```json
+{
+  "username": "admin",
+  "password": "admin123"
+}
+```
+В ответе получите JWT токен в поле `token`.
+
+**Шаг 2** — Нажмите кнопку **Authorize** (замок в правом верхнем углу).
+
+**Шаг 3** — В поле `bearerAuth (http, Bearer)` введите токен и нажмите **Authorize**:
+```
+<вставьте JWT токен>
+```
+
+После авторизации все последующие запросы автоматически добавляют заголовок `Authorization: Bearer <token>`.
+
+---
+
+### Структура аннотаций
+
+Все контроллеры задокументированы с помощью аннотаций springdoc-openapi:
+
+| Аннотация | Назначение |
+|---|---|
+| `@Tag` | Группировка эндпоинтов по тегу (отображается в Swagger UI) |
+| `@Operation` | Описание конкретного эндпоинта (summary + description) |
+| `@ApiResponse` / `@ApiResponses` | Описание кодов ответа и схем |
+| `@Parameter` | Документирование параметров (path, query) |
+| `@RequestBody` | Описание тела запроса |
+| `@SecurityRequirement` | Указание схемы безопасности (JWT bearerAuth) |
+
+Схема безопасности JWT Bearer зарегистрирована глобально в `SwaggerConfig` каждого сервиса.
+
+---
+
+### Как это работает технически
+
+```
+Browser
+  │
+  ▼
+API Gateway :8080
+  │  GET /webjars/swagger-ui/index.html          → отдаёт Swagger UI (springdoc-webflux)
+  │  GET /v3/api-docs/swagger-config             → возвращает список из 4 сервисов
+  │  GET /user-service/v3/api-docs               → RewritePath → user-service:8081/v3/api-docs
+  │  GET /catalog-service/v3/api-docs            → RewritePath → catalog-service:8082/v3/api-docs
+  │  GET /loan-service/v3/api-docs               → RewritePath → loan-service:8083/v3/api-docs
+  │  GET /notification-service/v3/api-docs       → RewritePath → notification-service:8084/v3/api-docs
+```
+
+Агрегация настроена декларативно в `api-gateway/src/main/resources/application.yml`:
+- 4 маршрута с фильтром `RewritePath` проксируют JSON-спецификации каждого сервиса
+- `springdoc.swagger-ui.urls` перечисляет все 4 сервиса для выпадающего списка
 
 ---
 
@@ -185,51 +283,52 @@ MongoDB выбрана как:
 
 ## План поэтапной миграции (Монолит → Микросервисы)
 
-### Этап 1 — Подготовка 
+### Этап 1 — Подготовка (1-2 недели)
 - Анализ монолита, выделение bounded contexts
 - Настройка CI/CD pipeline
 - Поднятие инфраструктуры: MongoDB, RabbitMQ, Docker registry
 - Написание тестов для существующего монолита (baseline)
 
-### Этап 2 — Strangler Fig: User Service 
+### Этап 2 — Strangler Fig: User Service (2 недели)
 - Вынесение аутентификации и управления пользователями в отдельный сервис
 - Монолит продолжает работать, новые запросы на auth → User Service
 - Миграция данных пользователей в MongoDB
 - **Zero downtime**: Feature flag для постепенного переключения
 
-### Этап 3 — Catalog Service 
+### Этап 3 — Catalog Service (2 недели)
 - Вынесение каталога книг
 - Синхронизация данных монолит ↔ Catalog Service через dual-write
 - Поисковые запросы переключить на новый сервис
 - Тестирование и снятие dual-write
 
-### Этап 4 — Loan Service 
+### Этап 4 — Loan Service (2 недели)
 - Наиболее сложный сервис (зависит от User + Catalog)
 - Настройка OpenFeign клиентов
 - Интеграция Circuit Breaker
 - Параллельная работа монолита для проверки корректности
 
-### Этап 5 — Notification Service 
+### Этап 5 — Notification Service (1 неделя)
 - Вынесение нотификаций
 - Настройка RabbitMQ exchange и очередей
 - Loan Service публикует события → Notification Service потребляет
 
-### Этап 6 — API Gateway 
+### Этап 6 — API Gateway (1 неделя)
 - Настройка маршрутов в Spring Cloud Gateway
 - JWT валидация на уровне Gateway
 - CORS, rate limiting, logging
 
-### Этап 7 — Frontend миграция 
+### Этап 7 — Frontend миграция (2 недели)
 - React + TypeScript приложение
 - Все запросы через единый API Gateway
 - Nginx для раздачи статики
 
-### Этап 8 — Завершение 
+### Этап 8 — Завершение (1 неделя)
 - Отключение монолита
 - Нагрузочное тестирование
 - Настройка мониторинга (Prometheus + Grafana опционально)
-- Документирование API (Swagger/OpenAPI)
+- Документирование API (Swagger/OpenAPI — реализовано)
 
+**Общее время миграции: ~12 недель**
 **Downtime при каждом переключении: < 1 минуты (blue-green deployment)**
 
 ---
@@ -275,7 +374,8 @@ cd frontend && npm install && npm start
 ```
 
 ### Первые шаги
-1. Открыть http://localhost:3000
+1. Открыть http://localhost:3000 — React UI
 2. Зарегистрироваться как читатель
 3. Добавить книги через панель управления (нужна роль LIBRARIAN/ADMIN)
 4. Взять книгу и проверить уведомления
+5. Открыть http://localhost:8080/webjars/swagger-ui/index.html — Swagger UI (тестирование API)
