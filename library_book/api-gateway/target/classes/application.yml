@@ -1,0 +1,126 @@
+server:
+  port: ${SERVER_PORT:8080}
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOriginPatterns: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"
+            allowCredentials: true
+      routes:
+        # ── Auth & User Service ──────────────────────────────────────────────
+        - id: user-service-auth
+          uri: ${USER_SERVICE_URL:http://localhost:8081}
+          predicates:
+            - Path=/api/auth/**
+          filters:
+            - StripPrefix=0
+
+        - id: user-service
+          uri: ${USER_SERVICE_URL:http://localhost:8081}
+          predicates:
+            - Path=/api/users/**
+          filters:
+            - StripPrefix=0
+            - JwtAuthFilter
+
+        # ── Catalog Service ──────────────────────────────────────────────────
+        - id: catalog-service
+          uri: ${CATALOG_SERVICE_URL:http://localhost:8082}
+          predicates:
+            - Path=/api/books/**
+          filters:
+            - StripPrefix=0
+            - JwtAuthFilter
+
+        # ── Loan Service ─────────────────────────────────────────────────────
+        - id: loan-service
+          uri: ${LOAN_SERVICE_URL:http://localhost:8083}
+          predicates:
+            - Path=/api/loans/**
+          filters:
+            - StripPrefix=0
+            - JwtAuthFilter
+
+        # ── Notification Service ──────────────────────────────────────────────
+        - id: notification-service
+          uri: ${NOTIFICATION_SERVICE_URL:http://localhost:8084}
+          predicates:
+            - Path=/api/notifications/**
+          filters:
+            - StripPrefix=0
+            - JwtAuthFilter
+
+        # ── Swagger JSON passthrough (no JWT) ─────────────────────────────────
+        - id: user-service-docs
+          uri: ${USER_SERVICE_URL:http://localhost:8081}
+          predicates:
+            - Path=/user-service/v3/api-docs
+          filters:
+            - RewritePath=/user-service/v3/api-docs, /v3/api-docs
+
+        - id: catalog-service-docs
+          uri: ${CATALOG_SERVICE_URL:http://localhost:8082}
+          predicates:
+            - Path=/catalog-service/v3/api-docs
+          filters:
+            - RewritePath=/catalog-service/v3/api-docs, /v3/api-docs
+
+        - id: loan-service-docs
+          uri: ${LOAN_SERVICE_URL:http://localhost:8083}
+          predicates:
+            - Path=/loan-service/v3/api-docs
+          filters:
+            - RewritePath=/loan-service/v3/api-docs, /v3/api-docs
+
+        - id: notification-service-docs
+          uri: ${NOTIFICATION_SERVICE_URL:http://localhost:8084}
+          predicates:
+            - Path=/notification-service/v3/api-docs
+          filters:
+            - RewritePath=/notification-service/v3/api-docs, /v3/api-docs
+
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    urls:
+      - name: user-service
+        url: /user-service/v3/api-docs
+        display-name: "User Service — аутентификация и пользователи"
+      - name: catalog-service
+        url: /catalog-service/v3/api-docs
+        display-name: "Catalog Service — каталог книг"
+      - name: loan-service
+        url: /loan-service/v3/api-docs
+        display-name: "Loan Service — учёт выдачи книг"
+      - name: notification-service
+        url: /notification-service/v3/api-docs
+        display-name: "Notification Service — уведомления"
+  api-docs:
+    enabled: true
+
+jwt:
+  secret: ${JWT_SECRET:libSecretKey2024LibraryAppSecretKey256Bits!}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,gateway
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    com.library.gateway: DEBUG
